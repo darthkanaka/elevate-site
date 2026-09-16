@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Not ours to publish: Evolve HI client collateral that happened to live on the
+# Elevate domain. Kept locally in harvest/pages/ so nothing is lost.
+harvest/pages/murakami-roofing-proposal.html
+
+# Private source material, not from the public site. Re-extractable any time from
+# ~/Library/Mobile Documents/com~apple~Pages/Documents/Story Brand - Elevate.pages
+# with: unzip -j '<file>' 'Data/*.jpg'
+harvest/storybrand/
