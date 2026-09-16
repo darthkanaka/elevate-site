@@ -117,3 +117,12 @@ The text of the document is stored in Apple's IWA format, which is a proprietary
 ## Deliberately not harvested
 
 The Murakami Roofing proposal page's images and branding, because that page is Evolve HI collateral that happens to be hosted on the Elevate domain. Only its HTML is saved, so nothing is lost when the page is moved or deleted.
+
+## What is in the repo and what is local only
+
+The repo will be public, because GitHub Pages on a free account requires it. So two things in this folder are deliberately untracked, listed in `.gitignore` at the repo root:
+
+1. `pages/murakami-roofing-proposal.html`, because it is Evolve HI client collateral and not ours to republish. It stays on disk.
+2. `storybrand/`, because those two photos came out of a private Pages document rather than off the public site, and one of them is 32 MB. Re-extract them any time with `unzip -j '<path to the .pages file>' 'Data/*.jpg'`.
+
+Everything else committed here was already public on elevatemediahi.com, so nothing new is exposed. Tracked size is about 55 MB, almost all of it the two animated GIFs and the hero video.
