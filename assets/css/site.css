@@ -1216,3 +1216,17 @@ p:last-child { margin-bottom: 0; }
   .stats { grid-template-columns: 1fr 1fr; }
   .stats li:last-child { grid-column: 1 / -1; }
 }
+
+/* Word figures. Some of these tiles carry a phrase rather than a number, so
+   they need their own size: display type set for two or three digits runs off
+   the grid the moment you put a word in it. */
+.hero-stats dd.is-word,
+.stats b.is-word {
+  font-size: clamp(1.18rem, 1.75vw, 1.72rem);
+  letter-spacing: -.015em;
+  line-height: 1.12;
+  text-wrap: balance;
+  align-self: end;
+  padding-bottom: .22em;
+}
+.stats b.is-word { color: var(--accent); }
