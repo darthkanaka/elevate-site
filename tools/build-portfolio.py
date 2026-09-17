@@ -45,11 +45,11 @@ def fig(it, pad):
             f'<span class="fig-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>'
             f'<span class="fig-label">{it["label"]}</span></button>')
 
-def render_rows(rowset, pad, solo_h=None):
+def render_rows(rowset, pad, tsum=None):
     out = []
     for row, solo in rowset:
         cls = "row row-solo" if solo else "row"
-        style = f' style="--solo-h:{solo_h}px"' if (solo and solo_h) else ""
+        style = f' style="--tsum:{tsum}"' if (solo and tsum) else ""
         out.append(" " * pad + f'<div class="{cls}"{style}>')
         out += [fig(i, pad + 2) for i in row]
         out.append(" " * pad + "</div>")
@@ -113,12 +113,12 @@ for pr in PROJECTS:
     if pr.get("note"): meta.append(f'          <p class="proj-note">{pr["note"]}</p>')
     if pr.get("link"): meta.append(f'          <a class="tlink proj-link" href="{pr["link"]}" target="_blank" rel="noopener">Watch on YouTube</a>')
     meta += ['        </div>', '        <div class="proj-media">']
-    meta.append(render_rows(rows_for(pr["items"], PROJ_W, PROJ_TGT), 10, solo_h=440))
+    meta.append(render_rows(rows_for(pr["items"], PROJ_W, PROJ_TGT), 10, tsum="2.47"))
     meta += ['        </div>', '      </article>']
     blocks.append("\n".join(meta))
 
 gal_items = [still(n, a) for n, a in GALLERY]
-gallery = render_rows(rows_for(gal_items, GAL_W, GAL_TGT), 8, solo_h=380)
+gallery = render_rows(rows_for(gal_items, GAL_W, GAL_TGT), 8, tsum="3.40")
 
 open("/tmp/pf_projects.html","w").write("\n\n".join(blocks))
 open("/tmp/pf_gallery.html","w").write(gallery)

@@ -497,9 +497,16 @@ p:last-child { margin-bottom: 0; }
     radial-gradient(120% 80% at 18% 88%, var(--accent-glow) 0%, transparent 58%);
 }
 
+/* The explicit width and height are load bearing. A canvas is a replaced
+   element with an intrinsic 300x150, and an absolutely positioned replaced
+   element with auto sizing keeps that intrinsic size and ignores inset, so
+   the particle field was only ever drawing into a 300x150 box in the corner
+   of the hero rather than across it. */
 #hero-canvas {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
   pointer-events: none;
 }
@@ -1264,8 +1271,9 @@ p:last-child { margin-bottom: 0; }
    target row height differs. That is what makes the page read as one thing.
 */
 
-.pf-intro { max-width: 60ch; }
-.pf-intro .lede { max-width: none; }
+/* The reading measure belongs on the prose, not on a wrapper that also holds
+   the display heading, which should keep growing with the page. */
+.pf-intro > .lede { max-width: 58ch; }
 
 /* -- rows ---------------------------------------------------------------- */
 .row {
@@ -1277,10 +1285,15 @@ p:last-child { margin-bottom: 0; }
 .row:last-child { margin-bottom: 0; }
 .row > .fig { flex: var(--r) 1 0; min-width: 0; }
 
-/* A solo item is clamped vertically rather than stretched to the row. */
+/* A solo item cannot flush, so it is given a share of the container rather
+   than stretched. That share is its own ratio over a target ratio sum, which
+   is the same arithmetic the flush rows use, so a solo row scales with the
+   window exactly like every other row. Sizing it from a fixed pixel height
+   was the bug: it stayed 782px wide from 1024 to 1920, which read as 100% of
+   the column on a laptop and 60% on a large display. */
 .row-solo > .fig {
   flex: 0 1 auto;
-  width: min(100%, calc(var(--solo-h, 460px) * var(--r)));
+  width: min(100%, calc(var(--r) / var(--tsum, 2.47) * 100%));
 }
 
 .fig {
@@ -1338,14 +1351,17 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* -- the reel, the one thing that earns width ---------------------------- */
-.reel { max-width: min(100%, calc(72vh * 1.7778)); }
+/* A share of the container, not a share of the viewport height. Height based
+   sizing made the reel change size when the window got shorter and stop
+   growing when it got wider. */
+.reel { max-width: 82%; }
 
 /* -- a project ----------------------------------------------------------- */
 /* Title beside the work rather than above it, and it holds position while
    the media scrolls past, so you always know what you are looking at. */
 .proj {
   display: grid;
-  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, clamp(148px, 15%, 232px)) minmax(0, 1fr);
   gap: clamp(20px, 3vw, 54px);
   padding-block: clamp(44px, 5vw, 86px);
   border-top: 1px solid var(--line-2);
