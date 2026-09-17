@@ -871,11 +871,13 @@ p:last-child { margin-bottom: 0; }
 }
 .stats li { display: grid; gap: 4px; }
 .stats b {
-  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  font-size: clamp(1.05rem, 1.35vw, 1.34rem);
   font-weight: 600;
-  line-height: 1;
-  letter-spacing: -.03em;
+  line-height: 1.12;
+  letter-spacing: -.015em;
   color: var(--accent);
+  hyphens: none;
+  text-wrap: balance;
 }
 /* Scoped to a direct child. An unscoped `.stats span` also matched the
    counter span nested inside the number and, at equal specificity but later in
@@ -983,8 +985,14 @@ p:last-child { margin-bottom: 0; }
   -webkit-text-stroke: 1.5px var(--accent);
   margin-bottom: 18px;
 }
-.step h3 { font-size: 1.28rem; text-transform: uppercase; margin-bottom: 12px; }
-.step p { color: var(--muted); font-size: .95rem; margin: 0; }
+.step h3 {
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  text-transform: uppercase;
+  line-height: 1.22;
+  margin-bottom: 0;
+  max-width: 18ch;
+}
+.step p { color: var(--muted); font-size: .95rem; margin: 12px 0 0; }
 
 /* 14  Contact ============================================================= */
 
@@ -1220,8 +1228,7 @@ p:last-child { margin-bottom: 0; }
 /* Word figures. Some of these tiles carry a phrase rather than a number, so
    they need their own size: display type set for two or three digits runs off
    the grid the moment you put a word in it. */
-.hero-stats dd.is-word,
-.stats b.is-word {
+.hero-stats dd.is-word {
   font-size: clamp(1.18rem, 1.75vw, 1.72rem);
   letter-spacing: -.015em;
   line-height: 1.12;
@@ -1229,4 +1236,3 @@ p:last-child { margin-bottom: 0; }
   align-self: end;
   padding-bottom: .22em;
 }
-.stats b.is-word { color: var(--accent); }
