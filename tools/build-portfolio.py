@@ -8,10 +8,15 @@ def ratio(n):
     return w / h
 
 def still(name, alt):  return dict(kind="img", name=name, alt=alt, r=ratio(name))
-def film(poster, provider, vid, label, alt):
-    src = (f"https://player.vimeo.com/video/{vid}?autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0"
-           if provider == "vimeo" else
-           f"https://www.youtube-nocookie.com/embed/{vid}?autoplay=1&amp;rel=0")
+def film(poster, provider, vid, label, alt, h=None):
+    # h is Vimeo's privacy hash. Unlisted videos do not resolve without it,
+    # on the player or on oEmbed.
+    if provider == "vimeo":
+        src = f"https://player.vimeo.com/video/{vid}?"
+        if h: src += f"h={h}&amp;"
+        src += "autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0"
+    else:
+        src = f"https://www.youtube-nocookie.com/embed/{vid}?autoplay=1&amp;rel=0"
     return dict(kind="vid", name=poster, alt=alt, label=label, src=src, r=16/9)
 
 # Client work sits in a 1060px column beside the sticky title; the gallery has
@@ -22,6 +27,31 @@ GAP = 14
 MAXH_MULT = 1.4     # past this multiple of target, a row is left alone, not stretched
 
 def rows_for(items, container, target):
+    """Films always get a row to themselves.
+
+    Left to the packer a film sometimes shares a row with a still and comes
+    out narrower than a film that happens to sit alone, which is the one
+    inconsistency Kawika has called out twice. Giving every film its own row
+    means every film on the page renders at the same width, and the stills
+    pack around them."""
+    groups, run = [], []
+    for it in items:
+        if it["kind"] == "vid":
+            if run: groups.append(("stills", run)); run = []
+            groups.append(("vid", [it]))
+        else:
+            run.append(it)
+    if run: groups.append(("stills", run))
+
+    out = []
+    for kind, grp in groups:
+        if kind == "vid":
+            out.append((grp, True))
+            continue
+        out += _pack_stills(grp, container, target)
+    return out
+
+def _pack_stills(items, container, target):
     packed = pack([i["r"] for i in items], container, GAP, target)
     out, k = [], 0
     for grp in packed:
@@ -89,18 +119,11 @@ PROJECTS = [
    still("kualoa-1","A worker beside a reservoir with the Kualoa mountains behind"),
    still("kualoa-3","A farmer opening a cacao pod with a knife"),
    still("kualoa-4","Looking up through a banana grove at Kualoa")]),
- # TODO-VIDEO: the Touch A Heart film is vimeo 1212462505. It is not embeddable
- # as of 2026-09-17 and this is not a code problem. Tested against a known good
- # video on the same account as a control: that one returns oEmbed 200 and
- # player 401, this one returns oEmbed 404 and player 403. A 403 from the
- # player is an embed permission refusal rather than a privacy or referrer
- # issue, so in Vimeo the fix is Settings > Privacy > "Where can this be
- # embedded", set to anywhere or with elevatemediahi.com allowed. Once that is
- # done, add this line to the items list and rerun:
- #   film("vid-tah", "vimeo", "1212462505", "Touch A Heart film", "<alt text>"),
- # and save a poster to assets/img/portfolio/vid-tah.jpg from the oEmbed
- # thumbnail_url.
  dict(client="Touch A Heart", title="Brand film and product stills", role="Video and photography", items=[
+   film("vid-tah-awareness","vimeo","1212462505","Awareness film",
+        "Aerial of a Hawaii ridge at golden hour, from the Touch A Heart awareness film", h="819bf80df0"),
+   film("vid-tah-legacy","vimeo","1035485143","Legacy film",
+        "Aerial of a Hawaii coastline from the Touch A Heart legacy film", h="7f7bf8d825"),
    still("tah-1","A Touch A Heart coconut and kukui cookie set with cookies arranged around it"),
    still("tah-2","A latte and brownies styled for a cafe menu")]),
 ]
