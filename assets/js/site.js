@@ -636,7 +636,33 @@
     });
   })();
 
-  /* -- 14  Footer year --------------------------------------------------- */
+  /* -- 14  Video facades -------------------------------------------------- */
+  /* The portfolio has five embeds. Loading all of them up front pulls in
+     megabytes of third party player script before anyone has pressed
+     anything, so each one stays a poster and a button until it is clicked. */
+
+  (function videoFacades() {
+    $$(".vid[data-embed]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var src = btn.getAttribute("data-embed");
+        if (!src) return;
+
+        var frame = document.createElement("iframe");
+        frame.src = src;
+        frame.title = btn.getAttribute("aria-label") || "Video";
+        frame.allow = "autoplay; fullscreen; picture-in-picture";
+        frame.setAttribute("allowfullscreen", "");
+        frame.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+
+        btn.innerHTML = "";
+        btn.appendChild(frame);
+        btn.removeAttribute("data-embed");
+        btn.style.cursor = "default";
+      });
+    });
+  })();
+
+  /* -- 15  Footer year --------------------------------------------------- */
 
   (function year() {
     var el = $("[data-year]");
