@@ -286,6 +286,12 @@ p:last-child { margin-bottom: 0; }
 .js [data-reveal="fade"] { transform: none; }
 .js [data-reveal].in { transition-delay: var(--d, 0ms); }
 
+/* Set by the script when the reveal finishes. Without this, every revealed
+   element keeps its transform transition and stagger delay forever, and any
+   later transform on the same element has to fight them. */
+.js [data-reveal].in.settled,
+.js .line.in.settled > span { transition: none; transition-delay: 0s; }
+
 /* Line-by-line reveal for display headings. The mask is the wrapper. */
 .lines { display: block; }
 .line { display: block; overflow: hidden; padding-bottom: .06em; }

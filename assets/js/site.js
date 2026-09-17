@@ -151,15 +151,38 @@
     var items = $$("[data-reveal], .line");
     if (!items.length) return;
 
-    function showAll() { items.forEach(function (el) { el.classList.add("in"); }); }
+    function showAll() { items.forEach(function (el) { el.classList.add("in", "settled"); }); }
 
     if (!motionOK() || !("IntersectionObserver" in window)) { showAll(); return; }
+
+    /* Once an element has finished revealing, drop the transition. Leaving it
+       in place means every revealed element keeps a 0.85s transform
+       transition, plus whatever stagger delay it was given, for the life of
+       the page. Anything that later drives transform on the same element,
+       the tilt cards being the case that caught this, then fights it: the
+       first card moved sluggishly and the third never moved at all, because
+       its 180ms delay restarted on every animation frame and never elapsed. */
+    function settle(el) {
+      if (el.dataset.settled) return;
+      el.dataset.settled = "1";
+      el.classList.add("settled");
+      el.style.removeProperty("--d");
+    }
 
     var io = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        e.target.classList.add("in");
-        obs.unobserve(e.target);
+        var el = e.target;
+        el.classList.add("in");
+        obs.unobserve(el);
+
+        el.addEventListener("transitionend", function onEnd(ev) {
+          if (ev.target !== el || ev.propertyName !== "transform") return;
+          el.removeEventListener("transitionend", onEnd);
+          settle(el);
+        });
+        // transitionend does not fire if nothing actually animated.
+        setTimeout(function () { settle(el); }, 1400);
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
 
@@ -350,6 +373,12 @@
         }
         raf = 0;
       }
+
+      // Belt and braces for the case above: if someone reaches a card while it
+      // is still revealing, take the transition over rather than race it.
+      card.addEventListener("pointerenter", function () {
+        card.style.transition = "none";
+      });
 
       card.addEventListener("pointermove", function (e) {
         var r = card.getBoundingClientRect();
