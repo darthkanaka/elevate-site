@@ -709,11 +709,15 @@ p:last-child { margin-bottom: 0; }
   border-radius: 50%;
 }
 .card-hint::before { opacity: .5; }
-.card-hint::after { animation: ping 3.4s var(--ease-out) infinite; animation-delay: var(--d, 0s); }
+.card-hint::after { animation: ping 2.1s var(--ease-out) infinite; animation-delay: var(--d, 0s); }
+/* The ring is out by 42% of the cycle, so with the cards offset a fifth of a
+   second apart the second is rising while the first is still fading. That
+   overlap is what makes it read as one pulse travelling left to right rather
+   than three lights blinking in turn. */
 @keyframes ping {
-  0%   { transform: scale(.65); opacity: .55; }
-  60%  { transform: scale(1.85); opacity: 0; }
-  100% { transform: scale(1.85); opacity: 0; }
+  0%   { transform: scale(.6);  opacity: .6; }
+  42%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
 }
 .card:hover .card-hint, .card:focus-within .card-hint { opacity: 0; }
 
