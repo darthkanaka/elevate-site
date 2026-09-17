@@ -1248,61 +1248,76 @@ p:last-child { margin-bottom: 0; }
 .pf-intro { max-width: 62ch; }
 .pf-intro .lede { max-width: none; }
 
-/* A project is a header plus a run of media. One rule set, any number of
-   items, so adding work later is markup and nothing else. */
-.proj { padding-block: clamp(48px, 5.5vw, 86px); border-top: 1px solid var(--line-2); }
-.proj:first-of-type { border-top: 0; }
+/* The reel is the one thing on this page that earns width, and even it is
+   capped. At full container width a 16:9 frame is most of a screen. */
+.reel { max-width: 940px; }
+
+.proj { padding-block: clamp(38px, 4vw, 62px); border-top: 1px solid var(--line-2); }
+.proj:first-of-type { border-top: 0; padding-top: 0; }
 
 .proj-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 10px 32px;
-  margin-bottom: clamp(22px, 2.6vw, 34px);
+  gap: 8px 32px;
+  margin-bottom: clamp(16px, 1.8vw, 24px);
 }
 .proj-head h2 {
-  font-size: clamp(1.35rem, 2.4vw, 2.1rem);
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
   text-transform: uppercase;
-  letter-spacing: -.02em;
-  max-width: 24ch;
+  letter-spacing: -.01em;
+  max-width: 28ch;
 }
 .proj-role {
   font-family: var(--mono);
-  font-size: .66rem;
+  font-size: .62rem;
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--accent);
   flex: none;
 }
-.proj-note { color: var(--muted); max-width: 60ch; margin: -8px 0 26px; font-size: .95rem; }
+.proj-note { color: var(--muted); max-width: 62ch; margin: -4px 0 20px; font-size: .92rem; }
 
-.proj-grid { display: grid; gap: clamp(10px, 1.2vw, 18px); }
-.proj-grid.two   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.proj-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 760px) {
+/* Client work sits at a calmer scale than the reel. Three up by default, so a
+   project reads as a set of frames rather than a run of billboards. */
+/* Frames stay about the same size whatever the project holds, by capping the
+   row rather than the cell. Two stills and four stills should not render at
+   wildly different scales just because there are different numbers of them. */
+.proj-grid { display: grid; gap: clamp(8px, 1vw, 14px); }
+.proj-grid.two   { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 660px; }
+.proj-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1000px; }
+.proj-grid.four  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.proj .vid { max-width: 760px; }
+/* A still that is not in a grid still has to obey the same scale. */
+.proj > .shot { max-width: 520px; }
+.proj-grid + .vid, .vid + .proj-grid { margin-top: clamp(8px, 1vw, 14px); }
+
+@media (max-width: 860px) {
+  .proj-grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
   .proj-grid.two, .proj-grid.three { grid-template-columns: 1fr 1fr; }
-  .proj-grid.three > :first-child { grid-column: 1 / -1; }
 }
-@media (max-width: 460px) {
-  .proj-grid.two, .proj-grid.three { grid-template-columns: 1fr; }
-  .proj-grid.three > :first-child { grid-column: auto; }
+@media (max-width: 420px) {
+  .proj-grid.two, .proj-grid.three, .proj-grid.four { grid-template-columns: 1fr; }
 }
 
-.shot { position: relative; overflow: hidden; background: var(--ink-2); }
+/* Colour at rest. The work is the point; desaturating a photographer's
+   portfolio to match a dark page is the tail wagging the dog. Hover still
+   gives feedback, it just does it with scale and light rather than colour. */
+/* display:block matters: most shots are figures, but the Hi*Sessions one is a
+   link, and an inline anchor ignores max-width. */
+.shot { position: relative; display: block; overflow: hidden; background: var(--ink-2); }
 .shot img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  filter: grayscale(1) brightness(.78);
-  transition: filter .6s var(--ease), transform .9s var(--ease);
+  transition: transform .9s var(--ease), filter .5s var(--ease);
 }
 .shot.tall img { aspect-ratio: 4 / 5; }
-.shot:hover img { filter: none; transform: scale(1.03); }
+.shot:hover img { transform: scale(1.04); filter: brightness(1.08); }
 
-/* Video facade. Five embedded players on one page is megabytes of third party
-   script before anyone presses anything, so each one is a poster and a button
-   until it is clicked. */
 .vid {
   position: relative;
   display: block;
@@ -1320,51 +1335,71 @@ p:last-child { margin-bottom: 0; }
   inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(.55) brightness(.68);
-  transition: filter .6s var(--ease), transform .9s var(--ease);
+  transition: transform .9s var(--ease), filter .5s var(--ease);
 }
-.vid:hover img, .vid:focus-visible img { filter: none; transform: scale(1.02); }
+.vid:hover img, .vid:focus-visible img { transform: scale(1.03); filter: brightness(1.08); }
 .vid iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 .vid-play {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  width: clamp(58px, 7vw, 86px);
+  width: clamp(46px, 4.4vw, 64px);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: var(--accent);
   color: #000;
-  transition: transform .4s var(--ease), background-color .3s;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, .45);
+  transition: transform .4s var(--ease);
   pointer-events: none;
 }
-.vid:hover .vid-play { transform: translate(-50%, -50%) scale(1.08); }
+.vid:hover .vid-play { transform: translate(-50%, -50%) scale(1.09); }
 .vid-play svg { width: 38%; height: 38%; fill: currentColor; margin-left: 8%; }
 
 .vid-label {
   position: absolute;
   left: 0; bottom: 0;
   z-index: 1;
-  padding: 12px 18px;
+  padding: 9px 14px;
   background: var(--ink-0);
   font-family: var(--mono);
-  font-size: .64rem;
+  font-size: .6rem;
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--muted);
   pointer-events: none;
 }
 
-/* Personal work. Masonry-ish columns so portrait and landscape frames can sit
-   together without being cropped to a common shape. */
-.gal { columns: 4 240px; column-gap: clamp(10px, 1.2vw, 18px); }
-.gal .shot { break-inside: avoid; margin-bottom: clamp(10px, 1.2vw, 18px); }
-.gal .shot img { aspect-ratio: auto; }
+/* Personal work. A dense grid with deliberate spans rather than even tiles, so
+   the page has a rhythm: a few frames carry, the rest support. Spans follow
+   each photograph's own shape, portraits tall and the strongest ones wide. */
+.gal {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: clamp(84px, 7.2vw, 128px);
+  grid-auto-flow: dense;
+  gap: clamp(8px, 1vw, 14px);
+}
+.gal .shot { grid-column: span 2; grid-row: span 2; }
+.gal .shot.g-wide { grid-column: span 3; grid-row: span 2; }
+.gal .shot.g-tall { grid-column: span 2; grid-row: span 3; }
+.gal .shot.g-hero { grid-column: span 4; grid-row: span 3; }
+.gal .shot img { width: 100%; height: 100%; aspect-ratio: auto; }
+
+@media (max-width: 900px) {
+  .gal { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .gal .shot.g-hero, .gal .shot.g-wide { grid-column: span 4; }
+}
+@media (max-width: 560px) {
+  .gal { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 22vw; }
+  .gal .shot, .gal .shot.g-wide, .gal .shot.g-hero { grid-column: span 2; grid-row: span 2; }
+  .gal .shot.g-tall { grid-column: span 2; grid-row: span 3; }
+}
 
 .pf-cta { text-align: center; display: grid; justify-items: center; gap: 26px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .shot img, .vid img { filter: none !important; transform: none !important; }
+  .shot img, .vid img { transform: none !important; filter: none !important; }
 }
