@@ -689,6 +689,34 @@ p:last-child { margin-bottom: 0; }
 .card-media video { position: absolute; inset: 0; opacity: 0; transition: opacity .45s var(--ease); }
 .card:hover .card-media video { opacity: 1; }
 
+/* These cards do more on hover than they show at rest, so each carries a
+   slow ring that says so without saying it. It stops the moment you arrive,
+   because by then the card is answering for itself. Staggered so the three
+   never pulse together, which would read as a loading state. */
+.card-hint {
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 3;
+  width: 22px; height: 22px;
+  pointer-events: none;
+  transition: opacity .45s var(--ease);
+}
+.card-hint::before, .card-hint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+}
+.card-hint::before { opacity: .5; }
+.card-hint::after { animation: ping 3.4s var(--ease-out) infinite; animation-delay: var(--d, 0s); }
+@keyframes ping {
+  0%   { transform: scale(.65); opacity: .55; }
+  60%  { transform: scale(1.85); opacity: 0; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+.card:hover .card-hint, .card:focus-within .card-hint { opacity: 0; }
+
 .card-glare {
   position: absolute;
   inset: 0;
@@ -756,10 +784,11 @@ p:last-child { margin-bottom: 0; }
   inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(1) brightness(.62);
+  /* Colour at rest. The gradient below still carries the caption. */
+  filter: brightness(.82);
   transition: filter .7s var(--ease), transform 1.1s var(--ease);
 }
-.hs-card:hover img { filter: grayscale(0) brightness(.78); transform: scale(1.05); }
+.hs-card:hover img { filter: brightness(1); transform: scale(1.05); }
 .hs-card::after {
   content: "";
   position: absolute;
@@ -847,7 +876,6 @@ p:last-child { margin-bottom: 0; }
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.06);
 }
 .about-media::after {
   content: "";
@@ -1144,7 +1172,8 @@ p:last-child { margin-bottom: 0; }
   .kinetic { transform: none; width: 100%; margin-left: 0; }
   .scroll-cue::after { animation: none; transform: scaleY(1); }
   .card-media video, .pat-glow, #hero-canvas { display: none !important; }
-  .card-media img, .hs-card img, .about-media img, .client-grid img { filter: none !important; }
+  .card-hint::after { display: none; }
+  .card-media img, .client-grid img { filter: none !important; }
 }
 
 /* 17  Sub pages =========================================================== */
