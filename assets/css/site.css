@@ -864,7 +864,7 @@ p:last-child { margin-bottom: 0; }
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 20px 24px;
   margin-top: 42px;
   padding-top: 34px;
   border-top: 1px solid rgba(255, 255, 255, .14);
@@ -882,7 +882,7 @@ p:last-child { margin-bottom: 0; }
    the file, shrank it to label size. */
 .stats li > span {
   font-family: var(--mono);
-  font-size: .62rem;
+  font-size: .6rem;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, .5);
@@ -892,6 +892,25 @@ p:last-child { margin-bottom: 0; }
 /* 12  Clients ============================================================= */
 
 .clients { background: var(--ink-0); }
+
+/* A wall of twelve marks says nothing on its own. The note is what turns the
+   shapes into a claim. */
+.wall-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px 40px;
+  margin-bottom: 30px;
+}
+.wall-head .label { margin-bottom: 0; }
+.wall-note {
+  margin: 0;
+  max-width: 46ch;
+  font-size: .94rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
 
 .client-grid {
   display: grid;
@@ -1192,3 +1211,8 @@ p:last-child { margin-bottom: 0; }
   color: var(--accent);
 }
 .legal .hairline { margin: 52px 0 0; }
+
+@media (max-width: 640px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stats li:last-child { grid-column: 1 / -1; }
+}

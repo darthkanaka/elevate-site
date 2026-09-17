@@ -182,15 +182,16 @@
 
     function run(el) {
       var target = parseFloat(el.getAttribute("data-count"));
+      var prefix = el.getAttribute("data-prefix") || "";
       var suffix = el.getAttribute("data-suffix") || "";
       if (isNaN(target)) return;
-      if (!motionOK()) { el.textContent = target + suffix; return; }
+      if (!motionOK()) { el.textContent = prefix + target + suffix; return; }
 
       var start = performance.now(), dur = 1600;
       (function tick(now) {
         var p = Math.min((now - start) / dur, 1);
         var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * eased) + suffix;
+        el.textContent = prefix + Math.round(target * eased) + suffix;
         if (p < 1) requestAnimationFrame(tick);
       })(start);
     }
