@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Elevate Media | Video, Photo and Motion Graphics in Hawaii</title>
+<meta name="description" content="Elevate Media is a Hawaii content studio making video, photography and motion graphics for brands that need to cut through. Ten years of work for Hawaiian Airlines, Four Seasons, Jeep and Kamehameha Schools.">
+<link rel="canonical" href="https://www.elevatemediahi.com/">
+
+<!-- TODO-LAUNCH: remove this line at DNS cutover so the site can be indexed. -->
+<meta name="robots" content="noindex">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Elevate Media | Video, Photo and Motion Graphics in Hawaii">
+<meta property="og:description" content="A Hawaii content studio making video, photography and motion graphics for brands that need to cut through.">
+<meta property="og:image" content="https://www.elevatemediahi.com/assets/video/hero-poster.jpg">
+<meta property="og:url" content="https://www.elevatemediahi.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070707">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 146 210'%3E%3Crect width='146' height='210' fill='%23070707'/%3E%3Cpath d='M73 8 L140 202 L6 202 Z M73 106 L102 202 L44 202 Z' fill='%23ff7c1a' fill-rule='evenodd'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="assets/img/mark.png">
+
+<link rel="preload" href="assets/fonts/poppins-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css">
+
+<script>document.documentElement.className += " js";</script>
+</head>
+<body>
+
+<!-- The peak from the logo's A, defined once and referenced everywhere. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <symbol id="peak" viewBox="0 0 146 210">
+      <path d="M73 0 L146 210 L0 210 Z M73 102 L102 210 L41 210 Z" fill-rule="evenodd"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/" aria-label="Elevate Media, home">
+      <img src="assets/img/logo.png" alt="Elevate Media" width="900" height="273">
+    </a>
+
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#process">Process</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn btn-sm nav-cta" href="#contact" data-magnetic>
+      <span>Start a project</span>
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="nav-menu" id="menu" hidden aria-label="Mobile">
+  <a href="#services">Services</a>
+  <a href="#work">Work</a>
+  <a href="#studio">Studio</a>
+  <a href="#process">Process</a>
+  <a href="#contact">Contact</a>
+  <a class="btn" href="#contact"><span>Start a project</span></a>
+</nav>
+
+<main id="main">
+
+  <!-- 01  Hero ========================================================== -->
+  <section class="hero">
+    <div class="hero-media">
+      <video
+        src="assets/video/hero.mp4"
+        poster="assets/video/hero-poster.jpg"
+        autoplay muted loop playsinline
+        preload="metadata"
+        aria-hidden="true"
+        tabindex="-1"></video>
+    </div>
+    <div class="hero-scrim"></div>
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+    <div class="wrap-wide hero-inner">
+      <h1 class="display hero-title lines">
+        <span class="line"><span>Quality</span></span>
+        <span class="line"><span>content within</span></span>
+        <span class="line"><span>your <em class="stroke" style="font-style:normal">reach</em></span></span>
+      </h1>
+
+      <div class="hero-foot">
+        <div class="hero-copy">
+          <p class="lede" data-reveal>
+            A Hawaii content studio. Video, photography and motion graphics for
+            brands that need to cut through, without the ad agency rate card.
+          </p>
+          <div class="hero-actions" style="margin-top:26px" data-reveal>
+            <a class="btn" href="#contact" data-magnetic>
+              <span>Start a project</span>
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="#work" data-magnetic><span>See the work</span></a>
+          </div>
+        </div>
+
+        <dl class="hero-stats" data-reveal>
+          <div>
+            <dd><span data-count="10" data-suffix="+">10+</span></dd>
+            <dt>Years shooting</dt>
+          </div>
+          <div>
+            <dd class="accent"><span data-count="82" data-suffix="%">82%</span></dd>
+            <dt>Of web traffic is video</dt>
+          </div>
+          <div>
+            <dd><span data-count="12" data-suffix="">12</span></dd>
+            <dt>Brands on this page</dt>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <span class="scroll-cue" aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- 02  Kinetic band ================================================== -->
+  <div class="kinetic-wrap">
+  <section class="kinetic mq" aria-hidden="true">
+    <div class="mq-track">
+      <!-- Six copies of the set, translating to -50%, so the loop is seamless
+           and ultrawide screens never reach the end of the track. -->
+      <span class="kword">Elevate</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Create</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Convert</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Elevate</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Create</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Convert</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Elevate</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Create</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Convert</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Elevate</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Create</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+      <span class="kword">Convert</span><span class="kdot"><svg class="peak"><use href="#peak"/></svg></span>
+    </div>
+  </section>
+  </div>
+
+  <!-- 03  Services ====================================================== -->
+  <section class="services sec" id="services">
+    <div class="wrap-wide">
+      <div class="sec-head">
+        <span class="label" data-reveal>What we make</span>
+        <h2 class="h1" data-reveal>High quality content and motion graphics without ad agency rates.</h2>
+      </div>
+
+      <div class="cards">
+        <article class="card" data-tilt data-reveal>
+                    <div class="card-media">
+            <img src="assets/video/svc-video-poster.jpg" alt="Musician Kimié Miner during a documentary shoot" width="900" height="600" loading="lazy">
+            <video src="assets/video/svc-video.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+          </div>
+          <div class="card-glare"></div>
+          <div class="card-body">
+            <div class="card-head"><h3>Video content</h3><span class="card-no">01</span></div>
+            <p>Videos make up 82% of all web traffic. We combine visuals and storytelling into content that cuts through the noise.</p>
+          </div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+                    <div class="card-media">
+            <img src="assets/video/svc-motion-poster.jpg" alt="Animated map and typography from a motion graphics piece" width="900" height="600" loading="lazy">
+            <video src="assets/video/svc-motion.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+          </div>
+          <div class="card-glare"></div>
+          <div class="card-body">
+            <div class="card-head"><h3>Motion graphics</h3><span class="card-no">02</span></div>
+            <p>Motion graphics usually require massive budgets. Not anymore. Explainer videos, logo animation and visual effects are all within reach.</p>
+          </div>
+        </article>
+
+        <article class="card" data-tilt data-reveal>
+                    <div class="card-media">
+            <img src="assets/img/photography.jpg" alt="A hiker standing at the base of a waterfall on Maui" width="1200" height="800" loading="lazy">
+          </div>
+          <div class="card-glare"></div>
+          <div class="card-body">
+            <div class="card-head"><h3>Photography</h3><span class="card-no">03</span></div>
+            <p>Photos tell stories, record history and evoke emotion. Don't settle for stock imagery. Let's make purposeful photos that elevate your brand.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04  Work ========================================================== -->
+  <!-- TODO-CONTENT: five placeholder projects. Real case studies and stills
+       come from kawikalopez.com/portfolio once Kawika picks the set. -->
+  <section class="work sec hscroll" id="work">
+    <div class="wrap-wide work-head">
+      <div>
+        <span class="label" data-reveal>Selected work</span>
+        <h2 class="h1" data-reveal>Ten years of frames</h2>
+      </div>
+      <p class="lede" data-reveal style="max-width:34ch">
+        Brand films, campaign stills and motion work made across the islands.
+      </p>
+    </div>
+
+    <div class="hs-track">
+      <a class="hs-card" href="#contact">
+        <img src="assets/img/aerial.jpg" alt="Aerial view of a Hawaii coastline at golden hour" width="2000" height="1332" loading="lazy">
+        <span class="hs-ghost">01</span>
+        <div class="hs-body">
+          <span class="kicker">Brand film</span>
+          <h3>Island tourism</h3>
+          <p>Aerial and ground campaign shot across four islands.</p>
+        </div>
+      </a>
+
+      <a class="hs-card" href="#contact">
+        <img src="assets/video/svc-video-poster.jpg" alt="Portrait lighting setup during a musician documentary shoot" width="900" height="600" loading="lazy">
+        <span class="hs-ghost">02</span>
+        <div class="hs-body">
+          <span class="kicker">Documentary</span>
+          <h3>Musician series</h3>
+          <p>Long form artist profiles built around live performance.</p>
+        </div>
+      </a>
+
+      <a class="hs-card" href="#contact">
+        <img src="assets/video/svc-motion-poster.jpg" alt="Frame from an animated strategy explainer" width="900" height="600" loading="lazy">
+        <span class="hs-ghost">03</span>
+        <div class="hs-body">
+          <span class="kicker">Motion graphics</span>
+          <h3>Explainer system</h3>
+          <p>A reusable animation kit for a campaign that had to scale.</p>
+        </div>
+      </a>
+
+      <a class="hs-card" href="#contact">
+        <img src="assets/img/photography.jpg" alt="Waterfall and swimming hole photographed on Maui" width="1200" height="800" loading="lazy">
+        <span class="hs-ghost">04</span>
+        <div class="hs-body">
+          <span class="kicker">Photography</span>
+          <h3>Location stills</h3>
+          <p>Library shoot replacing stock across a full brand refresh.</p>
+        </div>
+      </a>
+
+      <a class="hs-card" href="#contact">
+        <img src="assets/img/crew.jpg" alt="The Elevate Media crew on location" width="1200" height="800" loading="lazy">
+        <span class="hs-ghost">05</span>
+        <div class="hs-body">
+          <span class="kicker">Production</span>
+          <h3>Full crew days</h3>
+          <p>Multi camera builds when the shot list needs more than one operator.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="wrap-wide"><div class="hs-bar"><i></i></div></div>
+  </section>
+
+  <!-- 05  Studio ======================================================== -->
+  <section class="about sec" id="studio" data-spotlight
+           style="--pat-tile:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%22104%22 viewBox=%22-44 -64 234 338%22%3E%3Cpath d=%22M73 0 L146 210 L0 210 Z M73 102 L102 210 L41 210 Z%22 fill=%22%23ff7c1a%22 fill-rule=%22evenodd%22/%3E%3C/svg%3E')">
+    <div class="pat" aria-hidden="true"></div>
+    <div class="pat-glow" aria-hidden="true"></div>
+
+    <div class="wrap-wide about-grid">
+      <div class="about-media" data-reveal>
+        <img src="assets/img/owner.jpg" alt="Kawika Lopez operating a gimbal mounted cinema camera on location" width="1200" height="800">
+        <span class="about-cap">Kawika Lopez, owner</span>
+      </div>
+
+      <div class="about-body">
+        <span class="label" data-reveal>The studio</span>
+        <h2 class="h1" data-reveal>Small business mentality</h2>
+        <p data-reveal>
+          Elevate Media is built on relationships and trust. You get the care,
+          attention and thoughtfulness you deserve for your marketing goals. As
+          creatives, our biggest reward is watching our clients succeed.
+        </p>
+        <p data-reveal>
+          For the last ten years we have been making some of the highest quality
+          content in Hawaii. From local musicians to major automobile
+          manufacturers, companies like yours have put their name next to work
+          that raises their credibility.
+        </p>
+
+        <ul class="stats" data-reveal>
+          <li><b><span data-count="10" data-suffix="+">10+</span></b><span>Years in Hawaii</span></li>
+          <li><b><span data-count="12" data-suffix="">12</span></b><span>Brands trusted</span></li>
+          <li><b><span data-count="4" data-suffix="">4</span></b><span>Islands shot</span></li>
+        </ul>
+
+        <div style="margin-top:36px" data-reveal>
+          <a class="btn btn-ghost" href="https://kawikalopez.com/portfolio" data-magnetic>
+            <span>View the portfolio</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06  Clients ======================================================= -->
+  <section class="clients sec-tight">
+    <div class="wrap-wide">
+      <span class="label" data-reveal>Trusted by</span>
+      <ul class="client-grid" data-reveal>
+        <li><img src="assets/img/clients/ha.png" alt="Hawaiian Airlines" loading="lazy"></li>
+        <li><img src="assets/img/clients/fourseasons.png" alt="Four Seasons" loading="lazy"></li>
+        <li><img src="assets/img/clients/jeep.png" alt="Jeep" loading="lazy"></li>
+        <li><img src="assets/img/clients/motorola.png" alt="Motorola" loading="lazy"></li>
+        <li><img src="assets/img/clients/hta.png" alt="Hawaii Tourism Authority" loading="lazy"></li>
+        <li><img src="assets/img/clients/dtric.png" alt="DTRIC Insurance" loading="lazy"></li>
+        <li><img src="assets/img/clients/koolauballrooms.png" alt="Koolau Ballrooms" loading="lazy"></li>
+        <li><img src="assets/img/clients/ks.png" alt="Kamehameha Schools" loading="lazy"></li>
+        <li><img src="assets/img/clients/kualoa.png" alt="Kualoa Ranch" loading="lazy"></li>
+        <li><img src="assets/img/clients/locations.png" alt="Locations" loading="lazy"></li>
+        <li><img src="assets/img/clients/tandc.png" alt="Town and Country" loading="lazy"></li>
+        <li><img src="assets/img/clients/tiffen.png" alt="Tiffen" loading="lazy"></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 07  Process ======================================================= -->
+  <section class="process sec" id="process">
+    <svg class="process-svg" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" data-draw>
+      <path d="M0 330 C 240 330, 260 96, 500 96 S 760 330, 1000 330 S 1160 150, 1200 150"/>
+      <path d="M0 370 C 260 370, 300 150, 560 150 S 820 370, 1060 370 S 1180 210, 1200 210"/>
+    </svg>
+
+    <div class="wrap-wide">
+      <div class="sec-head">
+        <span class="label" data-reveal>How it goes</span>
+        <h2 class="h1" data-reveal>Elevate your brand now</h2>
+      </div>
+
+      <ol class="steps">
+        <li class="step" data-reveal>
+          <span class="step-no">01</span>
+          <h3>Forget the budget first</h3>
+          <p>Start with what the work has to do. We will tell you honestly whether it fits what you have.</p>
+        </li>
+        <li class="step" data-reveal>
+          <span class="step-no">02</span>
+          <h3>Free discovery call</h3>
+          <p>Thirty minutes on the goal, the audience and the deadline. No deck, no pitch theatre.</p>
+        </li>
+        <li class="step" data-reveal>
+          <span class="step-no">03</span>
+          <h3>Elevate the brand</h3>
+          <p>We shoot, cut and deliver. You get content you can run everywhere, not just once.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 08  Contact ======================================================= -->
+  <section class="contact sec" id="contact">
+    <div class="wrap-wide contact-grid">
+      <div class="contact-lede">
+        <span class="label" data-reveal>Get in touch</span>
+        <h2 class="h1" data-reveal>Tell us what you<br><em class="stroke" style="font-style:normal">need to make</em></h2>
+        <p class="lede" data-reveal>
+          Send the goal and the deadline. If it is a fit you will hear back the
+          same day, and if it is not we will say so and point you somewhere better.
+        </p>
+
+        <div class="contact-meta" data-reveal>
+          <a class="tlink" href="tel:+18082326959">808 232 6959</a>
+          <a class="tlink" href="mailto:kawika@elevatemediahi.com">kawika@elevatemediahi.com</a>
+          <p class="muted" style="font-size:.86rem;margin:6px 0 0">Honolulu, Hawaii</p>
+        </div>
+      </div>
+
+      <!-- TODO-LAUNCH: add action and method once the backend is decided. -->
+      <form class="form" data-reveal novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name">Name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required placeholder="you@company.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-subject">Subject</label>
+          <input id="f-subject" name="subject" type="text" required placeholder="What are we making">
+        </div>
+
+        <div class="field">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" name="message" required placeholder="The goal, the audience, the deadline"></textarea>
+        </div>
+
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+
+        <div>
+          <button class="btn" type="submit" data-magnetic>
+            <span>Send it</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+
+        <p class="form-note">We only use what you send here to reply. Nothing else.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap-wide">
+    <div class="footer-top">
+      <a href="/" aria-label="Elevate Media, home">
+        <img src="assets/img/logo.png" alt="Elevate Media" width="900" height="273">
+      </a>
+      <ul class="footer-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </div>
+    <div class="footer-bot">
+      <p>&copy; <span data-year>2026</span> Elevate Media. Honolulu, Hawaii.</p>
+      <p>
+        <a class="tlink" href="tel:+18082326959">808 232 6959</a>
+        &nbsp;&middot;&nbsp;
+        <a class="tlink" href="mailto:kawika@elevatemediahi.com">kawika@elevatemediahi.com</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>
