@@ -1286,7 +1286,10 @@ p:last-child { margin-bottom: 0; }
 /* No aspect-ratio and no object-fit. The image sets its own height and the
    layout works around it. display:block matters because most shots are
    figures but one is a link, and an inline anchor ignores widths. */
-.shot { position: relative; display: block; overflow: hidden; background: var(--ink-2); }
+/* margin:0 matters more than it looks. Most shots are <figure>, and browsers
+   give a figure 40px of inline margin by default, so every still was rendering
+   80px narrower than the column it sat in. */
+.shot { position: relative; display: block; margin: 0; overflow: hidden; background: var(--ink-2); }
 .shot img {
   width: 100%;
   height: auto;
@@ -1295,6 +1298,11 @@ p:last-child { margin-bottom: 0; }
 .shot:hover img { transform: scale(1.04); filter: brightness(1.08); }
 
 /* -- arrangements -------------------------------------------------------- */
+/* One width for landscape media, one for portrait, used everywhere. The
+   previous pass arranged each project for its own contents and ended up with
+   landscape stills rendering at five different widths down the page, which is
+   what made some of them look stranded. Variety now comes from what each
+   project contains and how its rows fall, not from resizing the work. */
 .lay {
   --pg: clamp(8px, 1vw, 14px);
   display: grid;
@@ -1303,33 +1311,33 @@ p:last-child { margin-bottom: 0; }
 }
 .lay-stack { grid-template-columns: minmax(0, 1fr); }
 
-/* A video with its stills stacked beside it. The video holds its fixed width
-   so it matches every other video on the page. */
-.lay-aside { grid-template-columns: minmax(0, 760px) minmax(0, 1fr); }
-.lay-aside > .stack { display: grid; gap: var(--pg); align-content: start; }
-
-.lay-row3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.lay-split { grid-template-columns: 1.45fr 1fr; }          /* an uneven pair */
-.lay-quad  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.lay-pair  {                                               /* a quieter pair */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: calc((200% - var(--pg)) / 3);
+/* Client stills: two columns, every frame the same width, packed by height.
+   Columns rather than a grid because the sets are not all one shape. The
+   Twelvenoon project alone holds a portrait, a landscape and a square, and a
+   fixed row can only make those agree by cropping them, which is off the
+   table. Columns give one width and no ragged rows. */
+.lay-wide {
+  display: block;
+  columns: 2;
+  column-gap: var(--pg);
 }
-.lay-text { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); align-items: center; }
-.lay-text p { color: var(--muted); font-size: .95rem; margin: 0; max-width: 46ch; }
+.lay-wide .shot { break-inside: avoid; margin-bottom: var(--pg); }
+.lay-wide .shot:last-child { margin-bottom: 0; }
 
-/* Video is the one thing that was genuinely too big. Every embed below the
-   reel is the same width, so the page has one video scale throughout. */
+/* A still with its story beside it. The still keeps the landscape width. */
+.lay-text { grid-template-columns: minmax(0, calc(50% - var(--pg) / 2)) minmax(0, 1fr); align-items: center; }
+.lay-text p { color: var(--muted); font-size: .95rem; margin: 0; max-width: 44ch; }
+
+/* Video sits a little above the still width so it reads as the featured
+   medium, without going back to being a billboard. Every embed below the reel
+   is this same width. */
 .proj .vid { max-width: 760px; }
 
 @media (max-width: 880px) {
-  .lay-aside, .lay-text { grid-template-columns: minmax(0, 1fr); }
-  .lay-aside > .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .lay-pair { max-width: none; }
+  .lay-text { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 560px) {
-  .lay-row3, .lay-split, .lay-quad, .lay-pair { grid-template-columns: 1fr; }
-  .lay-aside > .stack { grid-template-columns: 1fr; }
+@media (max-width: 620px) {
+  .lay-wide { columns: 1; }
 }
 
 /* -- video facade -------------------------------------------------------- */
