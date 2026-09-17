@@ -30,7 +30,9 @@
   --ink: #000000;
   --paper: #ffffff;
   --accent: #ff7c1a;
-  --panel: #282828;
+  --panel: #282828;   /* kept for the record: the old site's dark grey. No
+                         longer applied anywhere; the studio section that used
+                         it now sits on --ink-1 with the rest of the page. */
 
   /* Tonal steps inside the black, so dark surfaces can sit on each other */
   --ink-0: #070707;
@@ -864,7 +866,9 @@ p:last-child { margin-bottom: 0; }
 
 .about {
   position: relative;
-  background: var(--panel);
+  /* Matches the process section. #282828 was the old site's dark grey and it
+     sat too bright between two near black sections. */
+  background: var(--ink-1);
   overflow: hidden;
 }
 
@@ -887,7 +891,7 @@ p:last-child { margin-bottom: 0; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(40,40,40,.55), transparent 55%);
+  background: linear-gradient(to top, rgba(14,14,14,.72), transparent 55%);
   pointer-events: none;
 }
 .about-cap {
