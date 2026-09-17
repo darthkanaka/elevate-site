@@ -89,8 +89,18 @@ PROJECTS = [
    still("kualoa-1","A worker beside a reservoir with the Kualoa mountains behind"),
    still("kualoa-3","A farmer opening a cacao pod with a knife"),
    still("kualoa-4","Looking up through a banana grove at Kualoa")]),
- # TODO-VIDEO: the Touch A Heart film, vimeo 1212462505, once the link works.
- dict(client="Touch A Heart", title="Product photography", role="Photography", items=[
+ # TODO-VIDEO: the Touch A Heart film is vimeo 1212462505. It is not embeddable
+ # as of 2026-09-17 and this is not a code problem. Tested against a known good
+ # video on the same account as a control: that one returns oEmbed 200 and
+ # player 401, this one returns oEmbed 404 and player 403. A 403 from the
+ # player is an embed permission refusal rather than a privacy or referrer
+ # issue, so in Vimeo the fix is Settings > Privacy > "Where can this be
+ # embedded", set to anywhere or with elevatemediahi.com allowed. Once that is
+ # done, add this line to the items list and rerun:
+ #   film("vid-tah", "vimeo", "1212462505", "Touch A Heart film", "<alt text>"),
+ # and save a poster to assets/img/portfolio/vid-tah.jpg from the oEmbed
+ # thumbnail_url.
+ dict(client="Touch A Heart", title="Brand film and product stills", role="Video and photography", items=[
    still("tah-1","A Touch A Heart coconut and kukui cookie set with cookies arranged around it"),
    still("tah-2","A latte and brownies styled for a cafe menu")]),
 ]
