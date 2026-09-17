@@ -392,63 +392,79 @@
   })();
 
   /* -- 08  Kinetic type -------------------------------------------------- */
-  /* Two things at once: the track scrolls forever, and each character shifts
-     away from the cursor. Character rectangles are measured once per pointer
-     move against the track offset rather than per character, so this does not
-     thrash layout the way the reference version did. */
+  /* The track scrolls forever while characters shift away from the cursor.
+
+     Position cannot be cached here. The marquee moves continuously, so a
+     rectangle measured even a moment ago is already wrong, and caching all of
+     them is what made the reference version feel offset. Measuring all of them
+     every frame is the other extreme: there are a couple of hundred spans.
+
+     So hit test for the word under the pointer and measure only that word and
+     its two neighbours. Around twenty rectangles a frame, always current. The
+     test targets the word rather than the character because characters slide
+     out from under the cursor, and hit testing a moving target makes them
+     flicker between pushed and released. */
 
   (function kinetic() {
-    var band = $(".kinetic");
+    var band = document.querySelector(".kinetic");
     if (!band) return;
 
-    var words = $$(".kword", band);
-    words.forEach(function (w) {
+    // Split every word into characters up front. This runs even when the
+    // repulsion does not, so the markup stays identical in both cases.
+    $$(".kword", band).forEach(function (w) {
       var text = w.textContent;
       w.textContent = "";
       for (var i = 0; i < text.length; i++) {
-        var s = document.createElement("span");
-        s.className = "kchar";
-        s.textContent = text[i];
-        if (text[i] === " ") s.style.width = ".26em";
-        w.appendChild(s);
+        var c = document.createElement("span");
+        c.className = "kchar";
+        c.textContent = text[i];
+        w.appendChild(c);
       }
     });
 
     if (!motionOK() || !fine.matches) return;
 
-    var chars = $$(".kchar", band);
-    var boxes = [];
-    var dirty = true;
-
-    function measure() {
-      boxes = chars.map(function (c) {
-        var r = c.getBoundingClientRect();
-        return { el: c, x: r.left + r.width / 2, y: r.top + r.height / 2 };
-      });
-      dirty = false;
-    }
-
-    // The marquee moves continuously, so cached rectangles go stale fast.
-    // Re-measure on a timer instead of on every pointer move.
-    setInterval(function () { dirty = true; }, 400);
-    window.addEventListener("resize", debounce(function () { dirty = true; }, 200));
-
+    var RADIUS = 150;
+    var PUSH = 24;
+    var moved = [];
     var raf = 0, mx = -9999, my = -9999;
 
+    function release() {
+      for (var i = 0; i < moved.length; i++) moved[i].style.transform = "";
+      moved.length = 0;
+    }
+
     function push() {
-      if (dirty) measure();
-      for (var i = 0; i < boxes.length; i++) {
-        var b = boxes[i];
-        var dx = b.x - mx, dy = b.y - my;
-        var d = Math.hypot(dx, dy);
-        if (d < 110) {
-          var f = (110 - d) / 110 * 20;
-          b.el.style.transform = "translate(" + (dx / d * f).toFixed(1) + "px," + (dy / d * f).toFixed(1) + "px)";
-        } else if (b.el.style.transform) {
-          b.el.style.transform = "";
+      raf = 0;
+      release();
+      if (mx < 0) return;
+
+      // Probe left, centre and right. A single probe finds nothing while the
+      // pointer sits in the gap between two words, which left dead patches
+      // along the band even though characters were well inside the radius.
+      var group = [];
+      for (var k = -1; k <= 1; k++) {
+        var hit = document.elementFromPoint(mx + k * RADIUS * 0.6, my);
+        var w = hit && hit.closest ? hit.closest(".kword") : null;
+        if (w && group.indexOf(w) === -1) group.push(w);
+      }
+      if (!group.length) return;
+
+      for (var g = 0; g < group.length; g++) {
+        var chars = group[g].getElementsByClassName("kchar");
+        for (var i = 0; i < chars.length; i++) {
+          var c = chars[i];
+          var r = c.getBoundingClientRect();
+          var dx = r.left + r.width / 2 - mx;
+          var dy = r.top + r.height / 2 - my;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d >= RADIUS || d < 0.01) continue;
+          var f = (RADIUS - d) / RADIUS * PUSH;
+          c.style.transform =
+            "translate(" + (dx / d * f).toFixed(1) + "px," + (dy / d * f).toFixed(1) + "px)";
+          moved.push(c);
         }
       }
-      raf = 0;
     }
 
     band.addEventListener("pointermove", function (e) {
