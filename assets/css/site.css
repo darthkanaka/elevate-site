@@ -1245,14 +1245,18 @@ p:last-child { margin-bottom: 0; }
 
 /* 18  Portfolio =========================================================== */
 
+/* Each project is arranged for what it actually holds rather than poured into
+   one template. What keeps them on the same page is everything except the
+   arrangement: one gap, one video width, colour at rest, the same hover.
+   Nothing is cropped anywhere, so every layout here works around the shape
+   each photograph was composed in rather than forcing it into a box. */
+
 .pf-intro { max-width: 62ch; }
 .pf-intro .lede { max-width: none; }
 
-/* The reel is the one thing on this page that earns width, and even it is
-   capped. At full container width a 16:9 frame is most of a screen. */
 .reel { max-width: 940px; }
 
-.proj { padding-block: clamp(38px, 4vw, 62px); border-top: 1px solid var(--line-2); }
+.proj { padding-block: clamp(38px, 4vw, 64px); border-top: 1px solid var(--line-2); }
 .proj:first-of-type { border-top: 0; padding-top: 0; }
 
 .proj-head {
@@ -1277,47 +1281,60 @@ p:last-child { margin-bottom: 0; }
   color: var(--accent);
   flex: none;
 }
-.proj-note { color: var(--muted); max-width: 62ch; margin: -4px 0 20px; font-size: .92rem; }
 
-/* Client work sits at a calmer scale than the reel. Three up by default, so a
-   project reads as a set of frames rather than a run of billboards. */
-/* Frames stay about the same size whatever the project holds, by capping the
-   row rather than the cell. Two stills and four stills should not render at
-   wildly different scales just because there are different numbers of them. */
-.proj-grid { display: grid; gap: clamp(8px, 1vw, 14px); }
-.proj-grid.two   { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 660px; }
-.proj-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1000px; }
-.proj-grid.four  { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.proj .vid { max-width: 760px; }
-/* A still that is not in a grid still has to obey the same scale. */
-.proj > .shot { max-width: 520px; }
-.proj-grid + .vid, .vid + .proj-grid { margin-top: clamp(8px, 1vw, 14px); }
-
-@media (max-width: 860px) {
-  .proj-grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 720px) {
-  .proj-grid.two, .proj-grid.three { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 420px) {
-  .proj-grid.two, .proj-grid.three, .proj-grid.four { grid-template-columns: 1fr; }
-}
-
-/* Colour at rest. The work is the point; desaturating a photographer's
-   portfolio to match a dark page is the tail wagging the dog. Hover still
-   gives feedback, it just does it with scale and light rather than colour. */
-/* display:block matters: most shots are figures, but the Hi*Sessions one is a
-   link, and an inline anchor ignores max-width. */
+/* -- the frame itself ---------------------------------------------------- */
+/* No aspect-ratio and no object-fit. The image sets its own height and the
+   layout works around it. display:block matters because most shots are
+   figures but one is a link, and an inline anchor ignores widths. */
 .shot { position: relative; display: block; overflow: hidden; background: var(--ink-2); }
 .shot img {
   width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
+  height: auto;
   transition: transform .9s var(--ease), filter .5s var(--ease);
 }
-.shot.tall img { aspect-ratio: 4 / 5; }
 .shot:hover img { transform: scale(1.04); filter: brightness(1.08); }
 
+/* -- arrangements -------------------------------------------------------- */
+.lay {
+  --pg: clamp(8px, 1vw, 14px);
+  display: grid;
+  gap: var(--pg);
+  align-items: start;
+}
+.lay-stack { grid-template-columns: minmax(0, 1fr); }
+
+/* A video with its stills stacked beside it. The video holds its fixed width
+   so it matches every other video on the page. */
+.lay-aside { grid-template-columns: minmax(0, 760px) minmax(0, 1fr); }
+.lay-aside > .stack { display: grid; gap: var(--pg); align-content: start; }
+
+.lay-row3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lay-split { grid-template-columns: 1.45fr 1fr; }          /* an uneven pair */
+.lay-quad  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lay-pair  {                                               /* a quieter pair */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: calc((200% - var(--pg)) / 3);
+}
+.lay-text { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); align-items: center; }
+.lay-text p { color: var(--muted); font-size: .95rem; margin: 0; max-width: 46ch; }
+
+/* Video is the one thing that was genuinely too big. Every embed below the
+   reel is the same width, so the page has one video scale throughout. */
+.proj .vid { max-width: 760px; }
+
+@media (max-width: 880px) {
+  .lay-aside, .lay-text { grid-template-columns: minmax(0, 1fr); }
+  .lay-aside > .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lay-pair { max-width: none; }
+}
+@media (max-width: 560px) {
+  .lay-row3, .lay-split, .lay-quad, .lay-pair { grid-template-columns: 1fr; }
+  .lay-aside > .stack { grid-template-columns: 1fr; }
+}
+
+/* -- video facade -------------------------------------------------------- */
+/* Five embedded players is megabytes of third party script loaded before
+   anyone presses anything, so each stays a poster until it is clicked. */
 .vid {
   position: relative;
   display: block;
@@ -1372,31 +1389,19 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-/* Personal work. A dense grid with deliberate spans rather than even tiles, so
-   the page has a rhythm: a few frames carry, the rest support. Spans follow
-   each photograph's own shape, portraits tall and the strongest ones wide. */
+/* -- personal work ------------------------------------------------------- */
+/* Columns rather than a grid. A grid with fixed rows can only fit mixed
+   portrait and landscape by cropping them, and these are not croppable. The
+   arrangement comes from the mix itself, plus a few frames that break the
+   full width so the columns never read as a wall. */
 .gal {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-auto-rows: clamp(84px, 7.2vw, 128px);
-  grid-auto-flow: dense;
-  gap: clamp(8px, 1vw, 14px);
+  --pg: clamp(8px, 1vw, 14px);
+  columns: 4 265px;
+  column-gap: var(--pg);
 }
-.gal .shot { grid-column: span 2; grid-row: span 2; }
-.gal .shot.g-wide { grid-column: span 3; grid-row: span 2; }
-.gal .shot.g-tall { grid-column: span 2; grid-row: span 3; }
-.gal .shot.g-hero { grid-column: span 4; grid-row: span 3; }
-.gal .shot img { width: 100%; height: 100%; aspect-ratio: auto; }
-
-@media (max-width: 900px) {
-  .gal { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .gal .shot.g-hero, .gal .shot.g-wide { grid-column: span 4; }
-}
-@media (max-width: 560px) {
-  .gal { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 22vw; }
-  .gal .shot, .gal .shot.g-wide, .gal .shot.g-hero { grid-column: span 2; grid-row: span 2; }
-  .gal .shot.g-tall { grid-column: span 2; grid-row: span 3; }
-}
+.gal .shot { break-inside: avoid; margin-bottom: var(--pg); }
+.gal .shot.g-hero { column-span: all; margin-block: calc(var(--pg) * 2.2); }
+@media (max-width: 700px) { .gal { columns: 2 150px; } }
 
 .pf-cta { text-align: center; display: grid; justify-items: center; gap: 26px; }
 
