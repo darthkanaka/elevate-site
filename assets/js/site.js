@@ -642,7 +642,7 @@
      anything, so each one stays a poster and a button until it is clicked. */
 
   (function videoFacades() {
-    $$(".vid[data-embed]").forEach(function (btn) {
+    $$(".fig-vid[data-embed], .vid[data-embed]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var src = btn.getAttribute("data-embed");
         if (!src) return;

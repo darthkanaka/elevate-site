@@ -1244,132 +1244,74 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* 18  Portfolio =========================================================== */
+/*
+   The sizing engine is the justified-row algorithm Flickr uses. Every item in
+   a row is given a flex-grow equal to its own aspect ratio against a zero
+   basis, so its width is its share of the row:
 
-/* Each project is arranged for what it actually holds rather than poured into
-   one template. What keeps them on the same page is everything except the
-   arrangement: one gap, one video width, colour at rest, the same hover.
-   Nothing is cropped anywhere, so every layout here works around the shape
-   each photograph was composed in rather than forcing it into a box. */
+       width = (its ratio / sum of the row's ratios) * (row - gaps)
 
-.pf-intro { max-width: 62ch; }
+   Because each image then keeps its natural height at that width, every item
+   in a row lands at the same height on its own, with no cropping and no fixed
+   aspect boxes. Rows are packed at build time, where the ratios are known, and
+   written into the markup. Packing in the browser after images decode is what
+   produces layout shift.
+
+   A row of one cannot flush, so a solo item is bounded by height instead and
+   a lone film cannot balloon to the full width.
+
+   The same engine runs the client work and the personal gallery; only the
+   target row height differs. That is what makes the page read as one thing.
+*/
+
+.pf-intro { max-width: 60ch; }
 .pf-intro .lede { max-width: none; }
 
-.reel { max-width: 940px; }
-
-.proj { padding-block: clamp(38px, 4vw, 64px); border-top: 1px solid var(--line-2); }
-.proj:first-of-type { border-top: 0; padding-top: 0; }
-
-.proj-head {
+/* -- rows ---------------------------------------------------------------- */
+.row {
+  --pg: clamp(8px, .9vw, 14px);
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px 32px;
-  margin-bottom: clamp(16px, 1.8vw, 24px);
-}
-.proj-head h2 {
-  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
-  text-transform: uppercase;
-  letter-spacing: -.01em;
-  max-width: 28ch;
-}
-.proj-role {
-  font-family: var(--mono);
-  font-size: .62rem;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  flex: none;
-}
-
-/* -- the frame itself ---------------------------------------------------- */
-/* No aspect-ratio and no object-fit. The image sets its own height and the
-   layout works around it. display:block matters because most shots are
-   figures but one is a link, and an inline anchor ignores widths. */
-/* margin:0 matters more than it looks. Most shots are <figure>, and browsers
-   give a figure 40px of inline margin by default, so every still was rendering
-   80px narrower than the column it sat in. */
-.shot { position: relative; display: block; margin: 0; overflow: hidden; background: var(--ink-2); }
-.shot img {
-  width: 100%;
-  height: auto;
-  transition: transform .9s var(--ease), filter .5s var(--ease);
-}
-.shot:hover img { transform: scale(1.04); filter: brightness(1.08); }
-
-/* -- arrangements -------------------------------------------------------- */
-/* One width for landscape media, one for portrait, used everywhere. The
-   previous pass arranged each project for its own contents and ended up with
-   landscape stills rendering at five different widths down the page, which is
-   what made some of them look stranded. Variety now comes from what each
-   project contains and how its rows fall, not from resizing the work. */
-.lay {
-  --pg: clamp(8px, 1vw, 14px);
-  display: grid;
   gap: var(--pg);
-  align-items: start;
+  margin-bottom: var(--pg);
 }
-.lay-stack { grid-template-columns: minmax(0, 1fr); }
+.row:last-child { margin-bottom: 0; }
+.row > .fig { flex: var(--r) 1 0; min-width: 0; }
 
-/* Client stills: two columns, every frame the same width, packed by height.
-   Columns rather than a grid because the sets are not all one shape. The
-   Twelvenoon project alone holds a portrait, a landscape and a square, and a
-   fixed row can only make those agree by cropping them, which is off the
-   table. Columns give one width and no ragged rows. */
-.lay-wide {
-  display: block;
-  columns: 2;
-  column-gap: var(--pg);
-}
-.lay-wide .shot { break-inside: avoid; margin-bottom: var(--pg); }
-.lay-wide .shot:last-child { margin-bottom: 0; }
-
-/* A still with its story beside it. The still keeps the landscape width. */
-.lay-text { grid-template-columns: minmax(0, calc(50% - var(--pg) / 2)) minmax(0, 1fr); align-items: center; }
-.lay-text p { color: var(--muted); font-size: .95rem; margin: 0; max-width: 44ch; }
-
-/* Video sits a little above the still width so it reads as the featured
-   medium, without going back to being a billboard. Every embed below the reel
-   is this same width. */
-.proj .vid { max-width: 760px; }
-
-@media (max-width: 880px) {
-  .lay-text { grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 620px) {
-  .lay-wide { columns: 1; }
+/* A solo item is clamped vertically rather than stretched to the row. */
+.row-solo > .fig {
+  flex: 0 1 auto;
+  width: min(100%, calc(var(--solo-h, 460px) * var(--r)));
 }
 
-/* -- video facade -------------------------------------------------------- */
-/* Five embedded players is megabytes of third party script loaded before
-   anyone presses anything, so each stays a poster until it is clicked. */
-.vid {
+.fig {
   position: relative;
   display: block;
-  width: 100%;
+  margin: 0;
   padding: 0;
   border: 0;
-  background: var(--ink-2);
-  aspect-ratio: 16 / 9;
   overflow: hidden;
-  cursor: pointer;
-  color: inherit;
+  background: var(--ink-2);
 }
-.vid img {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform .9s var(--ease), filter .5s var(--ease);
+.fig img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 1s var(--ease), filter .5s var(--ease);
 }
-.vid:hover img, .vid:focus-visible img { transform: scale(1.03); filter: brightness(1.08); }
-.vid iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.fig:hover img { transform: scale(1.035); filter: brightness(1.06); }
 
-.vid-play {
+/* -- video, as just another ratio in the row ----------------------------- */
+.fig-vid { cursor: pointer; color: inherit; width: 100%; }
+/* A poster is a still of a film, not one of the photographs, so it is held to
+   the ratio its row was packed with. Without this a provider thumbnail that
+   does not match the video's shape silently breaks the row it sits in. */
+.fig-vid img { aspect-ratio: var(--r); object-fit: cover; }
+.fig-vid iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.fig-play {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  width: clamp(46px, 4.4vw, 64px);
+  width: clamp(44px, 4vw, 62px);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
@@ -1380,13 +1322,11 @@ p:last-child { margin-bottom: 0; }
   transition: transform .4s var(--ease);
   pointer-events: none;
 }
-.vid:hover .vid-play { transform: translate(-50%, -50%) scale(1.09); }
-.vid-play svg { width: 38%; height: 38%; fill: currentColor; margin-left: 8%; }
-
-.vid-label {
+.fig-vid:hover .fig-play { transform: translate(-50%, -50%) scale(1.09); }
+.fig-play svg { width: 38%; height: 38%; fill: currentColor; margin-left: 8%; }
+.fig-label {
   position: absolute;
   left: 0; bottom: 0;
-  z-index: 1;
   padding: 9px 14px;
   background: var(--ink-0);
   font-family: var(--mono);
@@ -1397,22 +1337,59 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-/* -- personal work ------------------------------------------------------- */
-/* Columns rather than a grid. A grid with fixed rows can only fit mixed
-   portrait and landscape by cropping them, and these are not croppable. The
-   arrangement comes from the mix itself, plus a few frames that break the
-   full width so the columns never read as a wall. */
-.gal {
-  --pg: clamp(8px, 1vw, 14px);
-  columns: 4 265px;
-  column-gap: var(--pg);
+/* -- the reel, the one thing that earns width ---------------------------- */
+.reel { max-width: min(100%, calc(72vh * 1.7778)); }
+
+/* -- a project ----------------------------------------------------------- */
+/* Title beside the work rather than above it, and it holds position while
+   the media scrolls past, so you always know what you are looking at. */
+.proj {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 54px);
+  padding-block: clamp(44px, 5vw, 86px);
+  border-top: 1px solid var(--line-2);
 }
-.gal .shot { break-inside: avoid; margin-bottom: var(--pg); }
-.gal .shot.g-hero { column-span: all; margin-block: calc(var(--pg) * 2.2); }
-@media (max-width: 700px) { .gal { columns: 2 150px; } }
+.proj:first-of-type { border-top: 0; padding-top: 0; }
+
+.proj-meta { position: sticky; top: calc(var(--nav-h) + 22px); align-self: start; }
+.proj-meta h2 {
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  line-height: 1.25;
+}
+.proj-title { margin: 8px 0 0; color: var(--muted); font-size: .92rem; line-height: 1.5; }
+.proj-role {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.proj-note { margin: 16px 0 0; color: var(--faint); font-size: .85rem; line-height: 1.65; }
+.proj-link { display: inline-block; margin-top: 14px; font-size: .82rem; }
+
+@media (max-width: 900px) {
+  .proj { grid-template-columns: minmax(0, 1fr); }
+  .proj-meta { position: static; }
+}
+
+/* Below this the rows themselves are the wrong shape, so each item takes the
+   full width and keeps its own height. */
+@media (max-width: 560px) {
+  .row { flex-direction: column; }
+  .row > .fig, .row-solo > .fig { width: 100%; flex: none; }
+}
+
+/* -- personal work ------------------------------------------------------- */
+/* Same rows, packed shorter so more of the set is on screen at once. */
+.gal { display: block; }
 
 .pf-cta { text-align: center; display: grid; justify-items: center; gap: 26px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .shot img, .vid img { transform: none !important; filter: none !important; }
+  .fig img { transform: none !important; filter: none !important; }
 }
