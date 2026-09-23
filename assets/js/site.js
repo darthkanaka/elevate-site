@@ -616,23 +616,43 @@
   })();
 
   /* -- 13  Contact form -------------------------------------------------- */
-  /* No backend is wired yet, so the form says so plainly instead of playing an
-     animation and pretending. TODO-LAUNCH: post to the real endpoint. */
+  /* There is no backend yet, so rather than a button that does nothing, the
+     form hands the message to the visitor's own mail app with everything
+     already filled in. It is not elegant, but it actually delivers, which the
+     alternative did not. The moment the form gets a real action attribute this
+     steps aside and lets the normal submit through. */
 
   (function form() {
     var f = $(".form");
     if (!f) return;
     var status = $(".form-status", f);
 
+    function say(msg) {
+      if (!status) return;
+      status.hidden = false;
+      status.textContent = msg;
+    }
+
     f.addEventListener("submit", function (e) {
-      if (!f.getAttribute("action")) {
-        e.preventDefault();
-        if (!status) return;
-        status.hidden = false;
-        status.textContent =
-          "This form is not connected yet. Email kawika@elevatemediahi.com or call 808 232 6959 and you will get a reply the same day.";
-        status.focus && status.focus();
+      if (f.getAttribute("action")) return;   // a real endpoint takes over
+      e.preventDefault();
+
+      var get = function (id) { var el = $("#" + id, f); return el ? el.value.trim() : ""; };
+      var name = get("f-name"), email = get("f-email");
+      var subject = get("f-subject"), message = get("f-message");
+
+      if (!name || !email || !message) {
+        say("Please add your name, your email and a message, then send again.");
+        return;
       }
+
+      var body = "From: " + name + " <" + email + ">\n\n" + message;
+      var href = "mailto:kawika@elevatemediahi.com"
+               + "?subject=" + encodeURIComponent(subject || "Project enquiry from the website")
+               + "&body=" + encodeURIComponent(body);
+
+      say("Opening your email app with this message ready to send. If nothing happens, email kawika@elevatemediahi.com or call 808 232 6959.");
+      window.location.href = href;
     });
   })();
 
