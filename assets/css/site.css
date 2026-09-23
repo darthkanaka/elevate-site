@@ -1482,3 +1482,6 @@ p:last-child { margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) {
   .fig img { transform: none !important; filter: none !important; }
 }
+
+/* Honeypot field. Moved off screen rather than hidden, so bots still find and fill it. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

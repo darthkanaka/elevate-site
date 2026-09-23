@@ -616,43 +616,83 @@
   })();
 
   /* -- 13  Contact form -------------------------------------------------- */
-  /* There is no backend yet, so rather than a button that does nothing, the
-     form hands the message to the visitor's own mail app with everything
-     already filled in. It is not elegant, but it actually delivers, which the
-     alternative did not. The moment the form gets a real action attribute this
-     steps aside and lets the normal submit through. */
+  /* Posts to the Apps Script web app named in the form's data-endpoint, which
+     logs the enquiry to a sheet and emails it to the inbox with Reply-To set
+     to the sender. Source and deploy steps are in gas/contact-notify.gs.
+
+     Apps Script does not send CORS headers, so the post is no-cors: the
+     browser sends it but cannot read the reply. A request that leaves the
+     browser counts as sent. If it cannot leave at all, or there is no
+     endpoint configured, the form falls back to opening the visitor's own
+     mail app with everything filled in, so an enquiry is never just lost. */
 
   (function form() {
-    var f = $(".form");
-    if (!f) return;
-    var status = $(".form-status", f);
+    $$(".form").forEach(function (f) {
+      var status = $(".form-status", f);
+      var btn = $("button[type=submit]", f);
+      var opened = Date.now();
 
-    function say(msg) {
-      if (!status) return;
-      status.hidden = false;
-      status.textContent = msg;
-    }
-
-    f.addEventListener("submit", function (e) {
-      if (f.getAttribute("action")) return;   // a real endpoint takes over
-      e.preventDefault();
-
-      var get = function (id) { var el = $("#" + id, f); return el ? el.value.trim() : ""; };
-      var name = get("f-name"), email = get("f-email");
-      var subject = get("f-subject"), message = get("f-message");
-
-      if (!name || !email || !message) {
-        say("Please add your name, your email and a message, then send again.");
-        return;
+      function say(msg) {
+        if (!status) return;
+        status.hidden = false;
+        status.textContent = msg;
+      }
+      function val(name) {
+        var el = f.elements[name];
+        return el ? String(el.value).trim() : "";
+      }
+      function mailto(d) {
+        var body = "From: " + d.name + " <" + d.email + ">\n\n" + d.message;
+        window.location.href = "mailto:kawika@elevatemediahi.com"
+          + "?subject=" + encodeURIComponent(d.subject || "Project enquiry from the website")
+          + "&body=" + encodeURIComponent(body);
       }
 
-      var body = "From: " + name + " <" + email + ">\n\n" + message;
-      var href = "mailto:kawika@elevatemediahi.com"
-               + "?subject=" + encodeURIComponent(subject || "Project enquiry from the website")
-               + "&body=" + encodeURIComponent(body);
+      f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var d = { name: val("name"), email: val("email"), subject: val("subject"),
+                  message: val("message"), website: val("website") };
 
-      say("Opening your email app with this message ready to send. If nothing happens, email kawika@elevatemediahi.com or call 808 232 6959.");
-      window.location.href = href;
+        if (!d.name || !d.email || !d.message) {
+          say("Please add your name, your email and a message, then send again.");
+          return;
+        }
+
+        // A form completed in under three seconds was not filled in by a person.
+        if (d.website || Date.now() - opened < 3000) {
+          say("Thanks, your message is on its way.");
+          f.reset();
+          return;
+        }
+
+        var endpoint = f.getAttribute("data-endpoint");
+        if (!endpoint) {
+          say("Opening your email app with this message ready to send. If nothing happens, email kawika@elevatemediahi.com or call 808 232 6959.");
+          mailto(d);
+          return;
+        }
+
+        var params = new URLSearchParams();
+        params.set("name", d.name);
+        params.set("email", d.email);
+        params.set("subject", d.subject);
+        params.set("message", d.message);
+        params.set("page", location.pathname);
+
+        if (btn) btn.disabled = true;
+        say("Sending…");
+
+        fetch(endpoint, { method: "POST", mode: "no-cors", body: params })
+          .then(function () {
+            say("Thanks " + d.name.split(" ")[0] + ", it's sent. You'll hear back from Kawika soon.");
+            f.reset();
+          })
+          .catch(function () {
+            say("That didn't go through, so we're opening your email app with the message ready instead.");
+            mailto(d);
+          })
+          .then(function () { if (btn) btn.disabled = false; });
+      });
     });
   })();
 
