@@ -103,8 +103,8 @@ PROJECTS = [
    still("ha-hana-2","Aerial view of a waterfall running through a green Maui valley")]),
  dict(client="Hawaiian Airlines", title="Diamond Head trek", role="Web content", items=[
    film("vid-diamondhead","yt","plRTp-6Dnx0","Diamond Head trek","Frame from the Diamond Head trek film")]),
- dict(client="Hi&#42;Sessions", title="Hawaii&#8217;s music video series", role="Director of photography",
-      note="The largest ongoing project at 9th Ave Studio. Through it we have partnered with Hawaiian "
+ dict(client="Hi&#42;Sessions", title="Hawaii&#8217;s music video series", role="Director of photography, 2015 to 2022",
+      note="Seven years as director of photography on the largest project at 9th Ave Studio. Through it we partnered with Hawaiian "
            "Airlines, Four Seasons Ko&#699;olina, Ko&#699;olau Ballrooms, King&#8217;s Hawaiian and the "
            "Department of Education, among others.",
       link="https://www.youtube.com/@HISessions", items=[
