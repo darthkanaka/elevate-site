@@ -667,7 +667,7 @@
 
         var endpoint = f.getAttribute("data-endpoint");
         if (!endpoint) {
-          say("Opening your email app with this message ready to send. If nothing happens, email kawika@elevatemediahi.com or call 808 232 6959.");
+          say("Opening your email app with this message ready to send. If nothing happens, email kawika@elevatemediahi.com or call 808 204 4575.");
           mailto(d);
           return;
         }
