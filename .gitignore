@@ -9,3 +9,7 @@ harvest/pages/murakami-roofing-proposal.html
 # ~/Library/Mobile Documents/com~apple~Pages/Documents/Story Brand - Elevate.pages
 # with: unzip -j '<file>' 'Data/*.jpg'
 harvest/storybrand/
+
+# Check tooling
+tools/node_modules/
+tools/package-lock.json
